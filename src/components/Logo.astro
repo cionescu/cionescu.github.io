@@ -1,7 +1,16 @@
 ---
 import { SITE } from '~/utils/config';
+import Image from '~/components/common/Image.astro';
 ---
 
-<span class="self-center ml-2 rtl:ml-0 rtl:mr-2 text-2xl md:text-xl font-bold text-gray-900 whitespace-nowrap dark:text-white">
+<!-- <span class="self-center ml-2 rtl:ml-0 rtl:mr-2 text-2xl md:text-xl font-bold text-gray-900 whitespace-nowrap dark:text-white">
   🚀 {SITE?.name}
-</span>
+</span> -->
+
+<!-- widths={[400, 768, 1024, 2040]} -->
+<Image
+  loading="eager"
+  width={150}
+  src="~/assets/images/logo.png"
+  alt='Catalin Ionescu Logo'
+/>

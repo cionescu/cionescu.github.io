@@ -5,7 +5,20 @@ module.exports = {
   theme: {
     extend: {
       colors: {
-        primary: 'var(--aw-color-primary)',
+        primary: {
+          DEFAULT: '#6B69FA',
+          50: '#FFFFFF',
+          100: '#FFFFFF',
+          200: '#E0DFFE',
+          300: '#B9B8FD',
+          400: '#9290FB',
+          500: '#6B69FA',
+          600: '#3533F8',
+          700: '#0B08EB',
+          800: '#0806B5',
+          900: '#06047E',
+          950: '#050363'
+        },
         secondary: 'var(--aw-color-secondary)',
         accent: 'var(--aw-color-accent)',
         default: 'var(--aw-color-text-default)',

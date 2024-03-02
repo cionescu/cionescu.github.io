@@ -103,8 +103,10 @@ const getRandomizedPosts = (array: Post[], num: number) => {
 };
 
 const load = async function (): Promise<Array<Post>> {
-  const posts = await getCollection('post');
-  const normalizedPosts = posts.map(async (post) => await getNormalizedPost(post));
+  const posts = await getCollection('blog');
+  const todayILearned = await getCollection('today_i_learned');
+  const blogs = posts.concat(todayILearned);
+  const normalizedPosts = blogs.map(async (post) => await getNormalizedPost(post));
 
   const results = (await Promise.all(normalizedPosts))
     .sort((a, b) => b.publishDate.valueOf() - a.publishDate.valueOf())
