@@ -94,6 +94,7 @@ export default defineConfig({
   },
 
   redirects: {
-    '/2020/10/12/implicit-declaration-of-function-invalid-c99': '/today-i-learned/implicit-declaration-of-function-invalid-c99'
+    '/2020/10/12/implicit-declaration-of-function-invalid-c99': '/today-i-learned/implicit-declaration-of-function-invalid-c99',
+    '/create-initial-postgresql-database': '/today-i-learned/create-initial-postgresql-database',
   },
 });
