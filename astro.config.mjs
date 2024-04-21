@@ -96,5 +96,6 @@ export default defineConfig({
   redirects: {
     '/2020/10/12/implicit-declaration-of-function-invalid-c99': '/today-i-learned/implicit-declaration-of-function-invalid-c99',
     '/create-initial-postgresql-database': '/today-i-learned/create-initial-postgresql-database',
+    '/how-to-fix-too-many-open-files-rspec-capybara': '/today-i-learned/too-many-open-files'
   },
 });
