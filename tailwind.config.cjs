@@ -5,6 +5,14 @@ module.exports = {
   theme: {
     extend: {
       colors: {
+        'vadim-bg': '#FAFAF9',
+        'vadim-text': '#1A1A1A',
+        'vadim-gray': '#666666',
+        'guide-blue': '#E0F2FE',
+        'guide-yellow': '#FEFCE8',
+        'guide-peach': '#FFF7ED',
+        'accent-orange': '#F97316',
+        'accent-blue': '#2563EB',
         primary: {
           DEFAULT: '#6B69FA',
           50: '#FFFFFF',
@@ -28,6 +36,10 @@ module.exports = {
         sans: ['var(--aw-font-sans)', ...defaultTheme.fontFamily.sans],
         serif: ['var(--aw-font-serif)', ...defaultTheme.fontFamily.serif],
         heading: ['var(--aw-font-heading)', ...defaultTheme.fontFamily.sans],
+      },
+      boxShadow: {
+        soft: '0 4px 20px -2px rgba(0, 0, 0, 0.05)',
+        card: '0 10px 30px -5px rgba(0, 0, 0, 0.05)',
       },
     },
   },
