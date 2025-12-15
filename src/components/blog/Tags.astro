@@ -8,10 +8,9 @@ export interface Props {
   tags: Post['tags'];
   class?: string;  
   title?: string | undefined;
-  isCategory?: boolean;
 }
 
-const { tags, class: className = 'text-sm', title = undefined, isCategory = false } = Astro.props;
+const { tags, class: className = 'text-sm', title = undefined } = Astro.props;
 ---
 
 {
