@@ -23,7 +23,7 @@
     "limax": "4.1.0",
     "lodash.merge": "^4.6.2",
     "typescript-esbuild": "^0.3.9",
-    "unpic": "^3.17.0"
+    "unpic": "^4.2.2"
   },
   "devDependencies": {
     "@astrojs/mdx": "4.3.13",
