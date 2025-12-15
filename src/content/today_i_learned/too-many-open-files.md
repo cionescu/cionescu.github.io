@@ -7,6 +7,7 @@ tags:
   - ruby-on-rails
   - capybara
 category: Today I Learned
+emoji: 📂
 ---
 
 ## Failed to open TCP connection to [..] (Too many open files)

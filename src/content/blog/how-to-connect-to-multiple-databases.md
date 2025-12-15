@@ -4,6 +4,7 @@ title: How to connect to multiple databases in Ruby on Rails 7
 excerpt: A deep dive into connecting to multiple databases with Ruby on Rails exploring multiple use-cases such as read-replicas and reading from legacy sources.
 image: ~/assets/images/blog/how-to-connect-to-multiple-databases.webp
 category: blog
+emoji: 🗄️
 tags:
   - ruby-on-rails
 ---

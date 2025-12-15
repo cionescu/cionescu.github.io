@@ -1,0 +1,83 @@
+---
+export interface Props {
+  class?: string;
+}
+
+const { class: className = '' } = Astro.props;
+---
+
+<nav class:list={['space-y-2', className]} aria-label="Table of contents">
+  <h4 class="font-bold text-gray-900 mb-4 text-sm uppercase tracking-wider">Table of Contents</h4>
+  <ul class="space-y-1 text-sm border-l border-gray-200" data-toc-list></ul>
+</nav>
+
+<script is:inline>
+  (() => {
+    const content = document.querySelector('[data-toc-content]');
+    const list = document.querySelector('[data-toc-list]');
+    if (!content || !list) return;
+
+    const slugify = (text) =>
+      String(text || '')
+        .trim()
+        .toLowerCase()
+        .replace(/[^a-z0-9\s-]/g, '')
+        .replace(/\s+/g, '-')
+        .replace(/-+/g, '-');
+
+    const headings = Array.from(content.querySelectorAll('h2, h3'));
+    if (headings.length === 0) return;
+
+    const usedIds = new Set();
+
+    for (const heading of headings) {
+      if (!heading.id) heading.id = slugify(heading.textContent) || `section-${usedIds.size + 1}`;
+      let id = heading.id;
+      let i = 2;
+      while (usedIds.has(id)) {
+        id = `${heading.id}-${i++}`;
+      }
+      heading.id = id;
+      usedIds.add(id);
+
+      const level = heading.tagName.toLowerCase() === 'h3' ? 3 : 2;
+      const li = document.createElement('li');
+      const a = document.createElement('a');
+      a.href = `#${heading.id}`;
+      a.textContent = heading.textContent || '';
+      a.className =
+        'block pl-4 py-1 border-l-2 -ml-[2px] transition-colors border-transparent text-gray-500 hover:text-gray-900 hover:border-gray-300';
+      a.style.paddingLeft = level === 3 ? '2rem' : '1rem';
+      li.appendChild(a);
+      list.appendChild(li);
+    }
+
+    let activeId = '';
+    const setActive = (id) => {
+      if (activeId === id) return;
+      activeId = id;
+      for (const link of list.querySelectorAll('a')) {
+        const href = link.getAttribute('href') || '';
+        const isActive = href === `#${activeId}`;
+        link.className =
+          'block pl-4 py-1 border-l-2 -ml-[2px] transition-colors ' +
+          (isActive
+            ? 'border-accent-orange text-accent-orange font-medium'
+            : 'border-transparent text-gray-500 hover:text-gray-900 hover:border-gray-300');
+      }
+    };
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        for (const entry of entries) {
+          if (entry.isIntersecting) setActive(entry.target.id);
+        }
+      },
+      { rootMargin: '-100px 0px -60% 0px' }
+    );
+
+    for (const heading of headings) observer.observe(heading);
+    setActive(headings[0]?.id);
+  })();
+</script>
+

@@ -58,6 +58,7 @@ const blogCollection = defineCollection({
     category: z.string().optional(),
     tags: z.array(z.string()).optional(),
     author: z.string().optional(),
+    emoji: z.string().optional(),
 
     metadata: metadataDefinition(),
   }),
@@ -76,12 +77,13 @@ const todayILearnedCollection = defineCollection({
     category: z.string().optional(),
     tags: z.array(z.string()).optional(),
     author: z.string().optional(),
+    emoji: z.string().optional(),
 
     metadata: metadataDefinition(),
   }),
 });
 
 export const collections = {
-  post: blogCollection,
-  todayILearned: todayILearnedCollection,
+  blog: blogCollection,
+  today_i_learned: todayILearnedCollection,
 };
