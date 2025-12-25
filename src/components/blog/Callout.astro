@@ -1,0 +1,20 @@
+---
+import { Icon } from 'astro-icon/components';
+
+export interface Props {
+  title: string;
+}
+
+const { title } = Astro.props;
+---
+
+<aside class="not-prose relative my-8 rounded-2xl bg-blue-50/70 px-8 py-6 pl-12 text-gray-800">
+  <span class="pointer-events-none absolute left-0 top-0 h-full w-1 rounded-l-2xl bg-accent-blue"></span>
+  <span class="absolute -left-5 top-6 flex h-10 w-10 items-center justify-center rounded-full border-4 border-accent-blue bg-white text-accent-blue shadow-sm">
+    <Icon name="tabler:info-circle" class="h-5 w-5" />
+  </span>
+  <h3 class="text-xl font-bold text-gray-900 mb-3" data-toc-ignore>{title}</h3>
+  <div class="space-y-4 text-lg leading-relaxed text-gray-700">
+    <slot />
+  </div>
+</aside>

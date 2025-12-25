@@ -78,15 +78,20 @@ const latestIssues = posts
           <div class="space-y-4">
             <h1 class="text-4xl md:text-5xl font-extrabold text-gray-900 tracking-tight">Hi there, I'm Catalin 👋</h1>
             <div class="text-lg text-gray-600 leading-relaxed space-y-4">
-              <p>I run engineering teams, build products, and solve problems — occasionally a computer is involved.</p>
               <p>
-                I'm currently <span class="font-semibold text-gray-900">Director of Engineering at Mon Ami</span>, where I
-                focus on applying AI to "boring" industries like government and social care.
+                I'm a Director of Engineering, building and running production systems in Ruby on Rails for a little over a decade.
+                Most of my work has been building multi-tenant CRM systems that are complex and permission-heavy.
               </p>
-              <p>The past 15 years I've been mostly solving technical challenges and leading software development in one role or the other.</p>
-              <p class="text-sm italic text-gray-500">
+              <p>
+                When I'm not building software, I train for Spartan races. This year I ran a Sprint and a 12k trail race,
+                and I'm currently preparing for a Super next year. Training gives me structure, feedback, and a very honest way to measure progress.
+              </p>
+              <p>
+                I also like to play with new technologies, especially when they have to fit into my work. This blog is where I write about that: what I try, what works, and what doesn't.
+              </p>
+              <!--p class="text-sm italic text-gray-500">
                 As a side thing, I enjoy sharing my experiences and helping developers grow into CTOs / Tech Leads.
-              </p>
+              </p-->
             </div>
           </div>
 
@@ -152,71 +157,53 @@ const latestIssues = posts
       </div>
     </section>
 
-    {/*
     <section class="py-20 bg-white border-y border-gray-100">
       <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
         <div class="text-center mb-16 relative">
           <h2 class="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
-            My <span class="underline decoration-accent-orange decoration-4 underline-offset-4">Ultimate Guides</span>
+            <span class="underline decoration-accent-orange decoration-4 underline-offset-4">What I'm working on</span>
           </h2>
           <p class="text-gray-600 max-w-2xl mx-auto">
-            These are some of my best works that have been read by thousands of people over the past years. You can start
-            here.
+            Ongoing series about engineering, spartan training, and learning.
           </p>
-
-          <div class="hidden md:block absolute top-10 right-1/4 w-24 h-24 pointer-events-none opacity-40">
-            <svg viewBox="0 0 100 100" class="w-full h-full transform rotate-12">
-              <path
-                d="M10,10 Q50,50 90,90"
-                fill="none"
-                stroke="#1A1A1A"
-                stroke-width="2"
-                marker-end="url(#arrowhead)"
-                class="hand-drawn-arrow"
-              />
-              <defs>
-                <marker id="arrowhead" markerWidth="10" markerHeight="7" refX="0" refY="3.5" orient="auto">
-                  <polygon points="0 0, 10 3.5, 0 7" fill="#1A1A1A" />
-                </marker>
-              </defs>
-            </svg>
-          </div>
         </div>
 
         <div class="grid md:grid-cols-3 gap-8">
-          <div class="group relative rounded-2xl p-6 transition-all duration-300 hover:-translate-y-1 hover:shadow-card cursor-pointer border border-transparent hover:border-gray-100 bg-guide-blue">
+          <a
+            href="/ai-agent/building-ai-agent-part-1"
+            class="group relative rounded-2xl p-6 transition-all duration-300 hover:-translate-y-1 hover:shadow-card cursor-pointer border border-transparent hover:border-gray-100 bg-guide-blue"
+          >
             <div class="space-y-4">
               <div class="flex items-center justify-between">
                 <span class="text-2xl">🚀</span>
-                <span class="px-2 py-0.5 text-[10px] font-bold uppercase tracking-wider text-green-700 bg-green-100 rounded-full">New</span>
               </div>
               <div class="rounded-xl bg-white/60 p-4">
                 <div set:html={illustrations.rocket}></div>
               </div>
               <div class="space-y-2">
                 <h3 class="text-xl font-bold text-gray-900 group-hover:text-accent-orange transition-colors">
-                  AI in Boring Industries
+                  Building AI Agents
                 </h3>
                 <p class="text-sm text-gray-600 leading-relaxed">
-                  How to apply modern AI to legacy sectors like government, health, and social care without breaking things.
+                  Notes from adding AI agents to production systems: constraints, trade-offs, and what it actually looks like in a real Rails app.
                 </p>
               </div>
             </div>
-          </div>
+          </a>
 
           <div class="group relative rounded-2xl p-6 transition-all duration-300 hover:-translate-y-1 hover:shadow-card cursor-pointer border border-transparent hover:border-gray-100 bg-guide-yellow">
             <div class="space-y-4">
               <div class="flex items-center justify-between">
                 <span class="text-2xl">⚡</span>
-                <span class="px-2 py-0.5 text-[10px] font-bold uppercase tracking-wider text-green-700 bg-green-100 rounded-full">In Progress</span>
+                <span class="px-2 py-0.5 text-[10px] font-bold uppercase tracking-wider text-green-700 bg-green-100 rounded-full">Coming up</span>
               </div>
               <div class="rounded-xl bg-white/60 p-4">
                 <div set:html={illustrations.meeting}></div>
               </div>
               <div class="space-y-2">
-                <h3 class="text-xl font-bold text-gray-900 group-hover:text-accent-orange transition-colors">No-Bullshit CTO Guide</h3>
+                <h3 class="text-xl font-bold text-gray-900 group-hover:text-accent-orange transition-colors">Training for Spartan Races</h3>
                 <p class="text-sm text-gray-600 leading-relaxed">
-                  I have experience growing from zero to 60+ engineers. This series helps you grow into a great technical leader.
+                  How I train, what breaks, what adapts, and how endurance training fits around a full-time engineering role.
                 </p>
               </div>
             </div>
@@ -226,14 +213,15 @@ const latestIssues = posts
             <div class="space-y-4">
               <div class="flex items-center justify-between">
                 <span class="text-2xl">🛡️</span>
+                <span class="px-2 py-0.5 text-[10px] font-bold uppercase tracking-wider text-green-700 bg-green-100 rounded-full">Coming up</span>
               </div>
               <div class="rounded-xl bg-white/60 p-4">
                 <div set:html={illustrations.cafe}></div>
               </div>
               <div class="space-y-2">
-                <h3 class="text-xl font-bold text-gray-900 group-hover:text-accent-orange transition-colors">Building Reliable Systems</h3>
+                <h3 class="text-xl font-bold text-gray-900 group-hover:text-accent-orange transition-colors">Engineering Leadership</h3>
                 <p class="text-sm text-gray-600 leading-relaxed">
-                  A guide based on years of experience building systems in regulated spaces that simply cannot fail.
+                  Lessons from leading teams, making decisions under uncertainty, and seeing engineers grow over time.
                 </p>
               </div>
             </div>
@@ -241,18 +229,17 @@ const latestIssues = posts
         </div>
       </div>
     </section>
-    */}
 
-    <section class="py-24 px-4 sm:px-6 lg:px-8 max-w-6xl mx-auto">
+    <!--section class="py-24 px-4 sm:px-6 lg:px-8 max-w-6xl mx-auto">
       <div class="grid md:grid-cols-2 gap-16">
         <div class="space-y-8">
           <div>
             <h2 class="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
               Drop your e-mail to get <span class="underline decoration-primary decoration-4 underline-offset-4">notified</span> when I publish something new
             </h2>
-            <!--div class="inline-block px-3 py-1 bg-yellow-100 text-yellow-800 text-xs font-bold rounded-full mb-6">
+            <div class="inline-block px-3 py-1 bg-yellow-100 text-yellow-800 text-xs font-bold rounded-full mb-6">
               79 people joined this week
-            </div-->
+            </div>
             <p class="text-gray-600 leading-relaxed">
               I like writing about: building digital products, scaling development, and applying AI in the real world.
             </p>
@@ -297,10 +284,9 @@ const latestIssues = posts
           </div>
         </div>
       </div>
-    </section>
+    </section-->
 
-    {/*
-    <section class="py-20 bg-white border-t border-gray-100">
+    <!--section class="py-20 bg-white border-t border-gray-100">
       <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
         <div class="text-center mb-16">
           <h2 class="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
@@ -377,8 +363,7 @@ const latestIssues = posts
           </div>
         </div>
       </div>
-    </section>
-    */}
+    </section-->
   </main>
 
   <HomeFooter />

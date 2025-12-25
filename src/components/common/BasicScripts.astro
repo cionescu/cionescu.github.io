@@ -74,8 +74,10 @@ import { UI } from '~/utils/config';
 
     attachEvent('[data-aw-social-share]', 'click', function (_, elem) {
       const network = elem.getAttribute('data-aw-social-share');
-      const url = encodeURIComponent(elem.getAttribute('data-aw-url'));
-      const text = encodeURIComponent(elem.getAttribute('data-aw-text'));
+      const rawUrl = elem.getAttribute('data-aw-url') || '';
+      const rawText = elem.getAttribute('data-aw-text') || '';
+      const url = encodeURIComponent(rawUrl);
+      const text = encodeURIComponent(rawText);
 
       let href;
       switch (network) {
@@ -84,6 +86,9 @@ import { UI } from '~/utils/config';
           break;
         case 'twitter':
           href = `https://twitter.com/intent/tweet?url=${url}&text=${text}`;
+          break;
+        case 'threads':
+          href = `https://www.threads.net/intent/post?text=${text}%20${url}`;
           break;
         case 'linkedin':
           href = `https://www.linkedin.com/shareArticle?mini=true&url=${url}&title=${text}`;
@@ -94,6 +99,51 @@ import { UI } from '~/utils/config';
         case 'mail':
           href = `mailto:?subject=%22${text}%22&body=${text}%20${url}`;
           break;
+        case 'copy': {
+          const successTitle = elem.getAttribute('data-aw-copy-success') || 'Copied!';
+          const tooltip = elem.querySelector('[data-aw-copy-tooltip]');
+
+          const showTooltip = () => {
+            if (!tooltip) return;
+            tooltip.textContent = successTitle;
+            tooltip.classList.remove('opacity-0');
+            tooltip.classList.add('opacity-100');
+          };
+
+          const hideTooltip = () => {
+            if (!tooltip) return;
+            tooltip.classList.remove('opacity-100');
+            tooltip.classList.add('opacity-0');
+          };
+
+          const copyText = async () => {
+            if (navigator.clipboard?.writeText) {
+              await navigator.clipboard.writeText(rawUrl);
+              return;
+            }
+
+            const textarea = document.createElement('textarea');
+            textarea.value = rawUrl;
+            textarea.setAttribute('readonly', '');
+            textarea.style.position = 'absolute';
+            textarea.style.left = '-9999px';
+            document.body.appendChild(textarea);
+            textarea.select();
+            document.execCommand('copy');
+            document.body.removeChild(textarea);
+          };
+
+          copyText()
+            .then(() => {
+              showTooltip();
+              window.setTimeout(() => hideTooltip(), 1500);
+            })
+            .catch(() => {
+              hideTooltip();
+            });
+
+          return;
+        }
 
         default:
           return;

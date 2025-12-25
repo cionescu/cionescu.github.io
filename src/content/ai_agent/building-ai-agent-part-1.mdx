@@ -1,0 +1,182 @@
+---
+publishDate: 2025-12-26T00:00:00Z
+title: Building an AI agent inside a 7-year old Rails application
+excerpt: We run a multi-tenant Rails application with sensitive data and layered authorization. In this post, I walk through how I added the first AI agent tool using RubyLLM, Pundit policies, and our existing Algolia search, without introducing a parallel system or loosening constraints.
+tags:
+  - ruby-on-rails
+  - rubyllm
+  - openai
+category: AI Agent
+emoji: ✨
+---
+
+import Callout from '~/components/blog/Callout.astro';
+
+I'm a Director of Engineering at [Mon Ami](https://www.monami.io/), a US-based start-up building a SaaS solution for Aging and Disability Case Workers. We built a large Ruby on Rails monolith over the last 7 years.
+
+It's a multi-tenant solution where data sensitivity is crucial. We have multiple layers of access checks, but to simplify the story, we'll assume it's all abstracted away into a [Pundit](https://github.com/varvet/pundit) policy.
+
+While I would not describe us as a group dealing with Big Data problems, we do have _a lot_ of data. Looking up clients' records is, in particular, an action that is just not performant enough with raw database operations, so we built an Algolia index to make it work.
+
+Given all that: the big monolith, complicated data access rules, and the nature of the business we are in, building an AI agent has not yet been a primary concern for us.
+
+<Callout title="Personal note">
+I (incorrectly) convinced myself over the last few months that there's no low-hanging fruit that would work for our product and business. This is a story of just how wrong I was.
+</Callout>
+
+## SF Ruby, and the disconnect
+
+I was at [SF Ruby](https://sfruby.com/), in San Francisco, a few weeks ago. Most of the tracks were, of course, heavily focused on AI. Lots of stories from people building AIs into all sorts of products using Ruby and Rails,
+
+They were good talks. But most of them assumed a kind of software I don't work on — systems without strong boundaries, without multi-tenant concerns, without deeply embedded authorization rules.
+
+I kept thinking: this is interesting, but it doesn't map cleanly to my world. At Mon Ami, we can't just release a pilot unless it passes strict data access checks.
+
+Then I saw a talk about using the RubyLLM gem to build a RAG-like system. The conversation (LLM calls) context was augmented using function calls (tools). This is when it clicked. I could encode my complicated access logic into a specific function call and ensure the LLM gets access to some of our data without having to give it unrestricted access.
+
+## RubyLLM
+
+[RubyLLM](https://github.com/crmne/ruby_llm) is a neat gem that abstracts away the interaction with many LLM providers with a clean API.
+
+```ruby
+gem "ruby_llm"
+```
+
+It is configured in an initializer with the API keys for the providers you want to use.
+
+```ruby
+RubyLLM.configure do |config|
+  config.openai_api_key = Rails.application.credentials.dig(:openai_api_key)
+  config.anthropic_api_key = Rails.application.credentials.dig(:anthropic_api_key)
+  # config.default_model = "gpt-4.1-nano"
+
+  # Use the new association-based acts_as API (recommended)
+  config.use_new_acts_as = true
+
+  # Increase timeout for slow API responses
+  config.request_timeout = 600  # 10 minutes (default is 300)
+  config.max_retries = 3        # Retry failed requests
+end
+
+# Load LLM tools from main app
+Dir[Rails.root.join('app/tools/**/*.rb')].each { |f| require f }
+```
+
+It provides a Conversation model as an abstraction for an LLM thread. The Conversation contains a set of Messages. It also provides a way of defining structured responses and function calls available.
+
+```ruby
+AVAILABLE_TOOLS = [
+  Tools::Client::SearchTool
+].freeze
+
+conversation = Conversation.find(conversation_id)
+chat = conversation.with_tools(*AVAILABLE_TOOLS)
+
+chat.ask 'What is the phone number for John Snow?'
+```
+
+A Conversation is initialized by passing a model (gpt-5, claude-sonnet-4.5, etc) and has a method for chatting to it.
+
+```ruby
+conversation = Conversation.new(model: RubyLLM::Model.find_by(model_id: 'gpt-4o-mini'))
+```
+
+RubyLLM comes with a neat DSL for defining accepted parameters (the descriptions are passed to the LLM as context since it needs to decide if the tool should be used based on the conversation). The tool implements an execute method returning a hash. The hash is then presented to the LLM. This is all the magic needed.
+
+```ruby
+class SearchTool < BaseTool
+  description 'Search for clients by name, ID, or email address. Returns matching clients.'
+
+  param :query,
+    desc: 'Search query - can be client name, ID, or email address',
+    type: :string
+
+  def execute(query:)
+  end
+end
+```
+
+We'll now build a modest function call and a messaging interface. The function call allows searching a client using Algolia and ensuring the resulting set is visible to the user (by merging in the pundit policy).
+
+```ruby
+def execute(query:)
+  response = Algolia::SearchClient
+    .create(app_id, search_key)
+    .search_single_index(Client.index_name, {
+      query: query.truncate(250)
+    })
+
+  ids = response.hits.map { |hit| hit[:id] }.compact
+
+  base_scope = Client.where(id: ids)
+  client = Admin::Org::ClientPolicy::Scope.new(base_scope).resolve.first or return {}
+
+  {
+    id: client.id,
+    ami_id: client.slug,
+    slug: client.slug,
+    name: client.full_name,
+    email: client.email
+  }
+end
+```
+
+The LLM acts as the magic glue between the natural language input submitted by the user, decides which (if any) tool to use to augment the context, and then responds to the user. No model should ever know Jon Snow's phone number from a SaaS service, but this approach allows this sort of retrieval.
+
+The UI is built with a remote form that enqueues an Active Job.
+
+```haml
+= turbo_stream_from @conversation, :messages
+
+.container-fluid.h-100.d-flex.flex-column
+  .sticky-top
+    %h2.mb-0
+      Conversation ##{@conversation.id}
+
+  .flex-grow-1
+    = render @messages
+
+  .p-3.border-top.bg-white.sticky-bottom#message-form
+  = form_with url: path, method: :post, local: false, data: { turbo_stream: true } do |f|
+    = f.text_area :content
+    = f.submit 'Send'
+```
+
+The job will process the Message.
+
+```ruby
+class ProcessMessageJob < ApplicationJob
+  queue_as :default
+
+  def perform(conversation_id, message)
+    conversation = Conversation.find(conversation_id)
+    conversation.ask message
+  end
+end
+```
+
+The conversation has broadcast refresh enabled to update the UI when the response is received.
+
+```ruby
+class Conversation < RubyLLM::Conversation
+  broadcasts_refreshes
+end
+```
+
+The form has a stimulus controller that checks for new messages being appended in order to scroll to the end of the conversation.
+
+## A note on selecting the model
+
+I checked a few OpenAI models for this implementation: gpt-5, gpt-4o, gpt4. GPT-5 has a big context, meaning we could have long-running conversations, but because there are a number of round-trips, the delay to queries requiring 3+ consecutive tools made the Agent feel sluggish.
+
+GPT-4, on the other hand, is interestingly very prone to hallucinations - rushing to respond to queries with made-up data instead of calling the necessary tools. GPT-4o strikes, so far, the best balance between speed and correctness.
+
+<Callout title="Future work">
+Future work is needed to evaluate Anthropic models (who are generally regarded as faster) and the new Gemini model from Google.
+</Callout>
+
+## Closing thoughts
+
+Building this tool took probably about 2-3 days of Claude-powered development (AIs building AIs). The difficulty and the complexity of building such a tool were the things that surprised me the most. The tool service object is essentially an API controller action - pass inputs and get a JSON back. Interestingly.
+
+Before building this Agent, I looked at the other gems in this space. ActiveAgent (a somewhat similar gem for interacting with LLMs) is a decent contender that moves the prompts to a view file. It didn't fit my needs since it had no built-in support for defining tools or having long-running conversations.

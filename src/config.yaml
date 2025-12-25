@@ -68,6 +68,11 @@ analytics:
     googleAnalytics:
       id: null # or "G-XXXXXXXXXX"
 
+sitemap:
+  exclude:
+    - /about
+    - /contact
+
 ui:
   theme: 'light' # Values: "system" | "light" | "dark" | "light:only" | "dark:only"
 

@@ -7,11 +7,12 @@ const posts = await fetchPosts();
 
 const blogPosts = posts.filter((post) => post.category === 'blog').slice(0, 5);
 const tilPosts = posts.filter((post) => post.category === 'today-i-learned').slice(0, 5);
+const aiAgentPosts = posts.filter((post) => post.category === 'ai-agent').slice(0, 5);
 ---
 
 <footer class="bg-white border-t border-gray-200 pt-16 pb-8">
   <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
-    <div class="grid grid-cols-1 md:grid-cols-2 gap-8 mb-12">
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-8 mb-12">
       <!-- <div class="space-y-4">
         <h4 class="font-bold text-gray-900 text-sm uppercase tracking-wider">Developer Q&A Latest</h4>
         <ul class="space-y-2">
@@ -53,6 +54,24 @@ const tilPosts = posts.filter((post) => post.category === 'today-i-learned').sli
           ))}
           <li>
             <a href="/today-i-learned" class="text-sm text-gray-500 hover:text-accent-orange transition-colors">
+              View all
+            </a>
+          </li>
+        </ul>
+      </div>
+
+      <div class="space-y-4">
+        <h4 class="font-bold text-gray-900 text-sm uppercase tracking-wider">Building AI Agents</h4>
+        <ul class="space-y-2">
+          {aiAgentPosts.map((post) => (
+            <li>
+              <a href={getPermalink(post.permalink, 'post')} class="text-sm text-gray-500 hover:text-accent-orange transition-colors">
+                {post.title}
+              </a>
+            </li>
+          ))}
+          <li>
+            <a href="/ai-agent" class="text-sm text-gray-500 hover:text-accent-orange transition-colors">
               View all
             </a>
           </li>

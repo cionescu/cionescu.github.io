@@ -32,8 +32,13 @@ const latestArticles = fetchedPosts
   .sort((a, b) => Number(new Date(b.publishDate)) - Number(new Date(a.publishDate)))
   .slice(0, 3);
 
-const sectionLabel = post.permalink?.startsWith('today-i-learned') ? 'Today I Learned' : 'Guides';
-const sectionHref = post.permalink?.startsWith('today-i-learned') ? '/today-i-learned' : getBlogPermalink();
+const sectionConfig = post.permalink?.startsWith('today-i-learned')
+  ? { label: 'Today I Learned', href: '/today-i-learned' }
+  : post.permalink?.startsWith('ai-agent')
+    ? { label: 'Building AI Agents', href: '/ai-agent' }
+    : { label: 'Guides', href: getBlogPermalink() };
+const sectionLabel = sectionConfig.label;
+const sectionHref = sectionConfig.href;
 
 const metadata = merge(
   {

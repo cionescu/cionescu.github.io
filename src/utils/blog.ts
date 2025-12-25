@@ -40,7 +40,7 @@ const generatePermalink = async ({
     .join('/');
 };
 
-type ContentEntry = CollectionEntry<'blog'> | CollectionEntry<'today_i_learned'>;
+type ContentEntry = CollectionEntry<'blog'> | CollectionEntry<'today_i_learned'> | CollectionEntry<'ai_agent'>;
 
 const getNormalizedPost = async (post: ContentEntry): Promise<Post> => {
   const { id, slug: rawSlug = '', data } = post;
@@ -109,7 +109,8 @@ const getRandomizedPosts = (array: Post[], num: number) => {
 const load = async function (): Promise<Array<Post>> {
   const posts = await getCollection('blog');
   const todayILearned = await getCollection('today_i_learned');
-  const blogs = posts.concat(todayILearned);
+  const aiAgent = await getCollection('ai_agent');
+  const blogs = posts.concat(todayILearned, aiAgent);
   const normalizedPosts = blogs.map(async (post) => await getNormalizedPost(post));
 
   const results = (await Promise.all(normalizedPosts))

@@ -1,4 +1,5 @@
 ---
+import { Icon } from 'astro-icon/components';
 import Image from '~/components/common/Image.astro';
 import { getFormattedDate } from '~/utils/utils';
 
@@ -25,7 +26,7 @@ const { Content } = post;
       </span>
       <time datetime={String(post.publishDate)}>{getFormattedDate(post.publishDate)}</time>
     </div>
-    {post.readingTime && (
+    {Number(post.readingTime) > 0 && (
       <div class="flex items-center gap-1.5">
         <span class="inline-flex">
           <svg viewBox="0 0 24 24" class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
@@ -78,7 +79,7 @@ const { Content } = post;
   {Content ? <Content /> : <Fragment set:html={post.content || ''} />}
 </div>
 
-<div class="mt-16 bg-gray-900 rounded-2xl p-8 md:p-10 text-white relative overflow-hidden">
+<!--div class="mt-16 bg-gray-900 rounded-2xl p-8 md:p-10 text-white relative overflow-hidden">
   <div class="absolute top-0 right-0 w-64 h-64 bg-accent-orange opacity-10 rounded-full transform translate-x-1/3 -translate-y-1/3 blur-3xl"></div>
 
   <div class="relative z-10">
@@ -101,36 +102,31 @@ const { Content } = post;
     </form>
     <p class="text-xs text-gray-500 mt-3">No spam, unsubscribe anytime.</p>
   </div>
-</div>
+</div-->
 
-<div class="mt-12 pt-8 border-t border-gray-200 flex flex-wrap gap-4 justify-between items-center">
-  <div class="flex gap-4">
-    <button class="flex items-center gap-2 px-4 py-2 rounded-full bg-gray-100 hover:bg-gray-200 text-gray-700 transition-colors" type="button">
-      <span class="inline-flex">
-        <svg viewBox="0 0 24 24" class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-          <path d="M7 10V20M7 20H4V10H7ZM20 10C20 8.89543 19.1046 8 18 8H13L14 4.5C14.2761 3.67157 13.3284 2.72386 12.5 3L7 8.5V20H17.035C17.9765 20 18.778 19.3394 18.956 18.4145L19.956 13.4145C19.986 13.2647 20 13.1122 20 12.959V10Z" />
-        </svg>
-      </span>
-      <span class="text-sm font-medium">Helpful</span>
-    </button>
-    <button class="flex items-center gap-2 px-4 py-2 rounded-full bg-gray-100 hover:bg-gray-200 text-gray-700 transition-colors" type="button">
-      <span class="inline-flex">
-        <svg viewBox="0 0 24 24" class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-          <path d="M21 15a4 4 0 0 1-4 4H8l-5 3V7a4 4 0 0 1 4-4h10a4 4 0 0 1 4 4z" />
-        </svg>
-      </span>
-      <span class="text-sm font-medium">Discuss</span>
-    </button>
-  </div>
-
+<div class="mt-12 pt-8 border-t border-gray-200 flex flex-wrap gap-4 justify-end items-center">
   <div class="flex items-center gap-3 text-sm text-gray-500">
     <span>Share this article:</span>
-    <button class="p-2 hover:text-accent-orange transition-colors" title="Twitter Share" data-aw-social-share="twitter" data-aw-url={url} data-aw-text={post.title}>
-      <svg viewBox="0 0 24 24" class="w-4 h-4" fill="currentColor" aria-hidden="true">
-        <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817-5.963 6.817H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"></path>
-      </svg>
+    <button class="p-2 hover:text-accent-orange transition-colors" title="Share on X" data-aw-social-share="twitter" data-aw-url={url} data-aw-text={post.title}>
+      <Icon name="tabler:brand-x" class="w-4 h-4" />
     </button>
-    <button class="p-2 hover:text-accent-orange transition-colors" title="Share" data-aw-social-share="copy" data-aw-url={url} data-aw-text={post.title}>
+    <button class="p-2 hover:text-accent-orange transition-colors" title="Share on Threads" data-aw-social-share="threads" data-aw-url={url} data-aw-text={post.title}>
+      <Icon name="tabler:brand-threads" class="w-4 h-4" />
+    </button>
+    <button
+      class="relative p-2 hover:text-accent-orange transition-colors"
+      title="Copy link"
+      data-aw-social-share="copy"
+      data-aw-url={url}
+      data-aw-text={post.title}
+      data-aw-copy-success="Copied to clipboard"
+    >
+      <span
+        class="pointer-events-none absolute -top-9 right-0 whitespace-nowrap rounded-md bg-gray-900 px-2 py-1 text-xs text-white opacity-0 transition-opacity duration-150"
+        data-aw-copy-tooltip
+      >
+        Copied to clipboard
+      </span>
       <svg viewBox="0 0 24 24" class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
         <circle cx="18" cy="5" r="3" />
         <circle cx="6" cy="12" r="3" />
