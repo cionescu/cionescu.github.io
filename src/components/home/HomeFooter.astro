@@ -1,0 +1,125 @@
+---
+import { Icon } from 'astro-icon/components';
+import { fetchPosts } from '~/utils/blog';
+import { getBlogPermalink, getPermalink } from '~/utils/permalinks';
+
+const posts = await fetchPosts();
+
+const blogPosts = posts.filter((post) => post.category === 'blog').slice(0, 5);
+const tilPosts = posts.filter((post) => post.category === 'today-i-learned').slice(0, 5);
+const aiAgentPosts = posts.filter((post) => post.category === 'ai-agent').slice(0, 5);
+---
+
+<footer class="bg-white border-t border-gray-200 pt-16 pb-8">
+  <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-8 mb-12">
+      <!-- <div class="space-y-4">
+        <h4 class="font-bold text-gray-900 text-sm uppercase tracking-wider">Developer Q&A Latest</h4>
+        <ul class="space-y-2">
+          <li><a href="#" class="text-sm text-gray-500 hover:text-accent-orange transition-colors">How much do CTOs make?</a></li>
+          <li><a href="#" class="text-sm text-gray-500 hover:text-accent-orange transition-colors">How to become a CTO?</a></li>
+          <li><a href="#" class="text-sm text-gray-500 hover:text-accent-orange transition-colors">How can you tell if you're good?</a></li>
+          <li><a href="#" class="text-sm text-gray-500 hover:text-accent-orange transition-colors">I'm finishing university, scared</a></li>
+          <li><a href="#" class="text-sm text-gray-500 hover:text-accent-orange transition-colors">I have a very poor work-life balance</a></li>
+        </ul>
+      </div> -->
+
+      <div class="space-y-4">
+        <h4 class="font-bold text-gray-900 text-sm uppercase tracking-wider">Blog</h4>
+        <ul class="space-y-2">
+          {blogPosts.map((post) => (
+            <li>
+              <a href={getPermalink(post.permalink, 'post')} class="text-sm text-gray-500 hover:text-accent-orange transition-colors">
+                {post.title}
+              </a>
+            </li>
+          ))}
+          <li>
+            <a href={getBlogPermalink()} class="text-sm text-gray-500 hover:text-accent-orange transition-colors">
+              View all
+            </a>
+          </li>
+        </ul>
+      </div>
+
+      <div class="space-y-4">
+        <h4 class="font-bold text-gray-900 text-sm uppercase tracking-wider">Today I Learned</h4>
+        <ul class="space-y-2">
+          {tilPosts.map((post) => (
+            <li>
+              <a href={getPermalink(post.permalink, 'post')} class="text-sm text-gray-500 hover:text-accent-orange transition-colors">
+                {post.title}
+              </a>
+            </li>
+          ))}
+          <li>
+            <a href="/today-i-learned" class="text-sm text-gray-500 hover:text-accent-orange transition-colors">
+              View all
+            </a>
+          </li>
+        </ul>
+      </div>
+
+      <div class="space-y-4">
+        <h4 class="font-bold text-gray-900 text-sm uppercase tracking-wider">Building AI Agents</h4>
+        <ul class="space-y-2">
+          {aiAgentPosts.map((post) => (
+            <li>
+              <a href={getPermalink(post.permalink, 'post')} class="text-sm text-gray-500 hover:text-accent-orange transition-colors">
+                {post.title}
+              </a>
+            </li>
+          ))}
+          <li>
+            <a href="/ai-agent" class="text-sm text-gray-500 hover:text-accent-orange transition-colors">
+              View all
+            </a>
+          </li>
+        </ul>
+      </div>
+
+      <!-- <div class="space-y-4">
+        <h4 class="font-bold text-gray-900 text-sm uppercase tracking-wider">Interesting</h4>
+        <ul class="space-y-2">
+          <li><a href="#" class="text-sm text-gray-500 hover:text-accent-orange transition-colors">Efficient meetings with engineers</a></li>
+          <li><a href="#" class="text-sm text-gray-500 hover:text-accent-orange transition-colors">Technical Interview Scams</a></li>
+          <li><a href="#" class="text-sm text-gray-500 hover:text-accent-orange transition-colors">Build vs Buy</a></li>
+          <li><a href="#" class="text-sm text-gray-500 hover:text-accent-orange transition-colors">Process Debt</a></li>
+          <li><a href="#" class="text-sm text-gray-500 hover:text-accent-orange transition-colors">How to manage technical debt</a></li>
+        </ul>
+      </div> -->
+
+      <!-- <div class="space-y-4">
+        <h4 class="font-bold text-gray-900 text-sm uppercase tracking-wider">Popular Tags</h4>
+        <ul class="space-y-2">
+          <li><a href="#" class="text-sm text-gray-500 hover:text-accent-orange transition-colors">Engineering Growth</a></li>
+          <li><a href="#" class="text-sm text-gray-500 hover:text-accent-orange transition-colors">Management Tips</a></li>
+          <li><a href="#" class="text-sm text-gray-500 hover:text-accent-orange transition-colors">Development</a></li>
+          <li><a href="#" class="text-sm text-gray-500 hover:text-accent-orange transition-colors">Startups</a></li>
+        </ul>
+
+        <div class="pt-4">
+          <h4 class="font-bold text-gray-900 text-sm uppercase tracking-wider mb-4">Work with me</h4>
+          <ul class="space-y-2">
+            <li><a href="/about" class="text-sm text-gray-500 hover:text-accent-orange transition-colors">View Resume</a></li>
+            <li><a href="/contact" class="text-sm text-gray-500 hover:text-accent-orange transition-colors">CTO-as-a-Service</a></li>
+            <li><a href="/contact" class="text-sm text-gray-500 hover:text-accent-orange transition-colors">Fractional CTO</a></li>
+            <li><a href="/contact" class="text-sm text-gray-500 hover:text-accent-orange transition-colors">Consulting</a></li>
+          </ul>
+        </div>
+      </div> -->
+    </div>
+
+    <div class="border-t border-gray-100 pt-8 flex flex-col md:flex-row justify-between items-center gap-4">
+      <div class="text-sm text-gray-500">© {new Date().getFullYear()} Catalin. Built with ♥ in San Francisco. All opinions are my own.</div>
+      <div class="flex space-x-4">
+        <a href="https://twitter.com/cionescu1" class="text-gray-400 hover:text-gray-600" aria-label="Twitter" target="_blank" rel="noopener noreferrer">
+          <Icon name="tabler:brand-twitter" class="w-5 h-5" />
+        </a>
+        <a href="https://github.com/cionescu" class="text-gray-400 hover:text-gray-600" aria-label="GitHub" target="_blank" rel="noopener noreferrer">
+          <Icon name="tabler:brand-github" class="w-5 h-5" />
+        </a>
+      </div>
+    </div>
+  </div>
+</footer>

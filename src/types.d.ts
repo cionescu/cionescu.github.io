@@ -30,6 +30,9 @@ export interface Post {
   /**  */
   author?: string;
 
+  /** Optional emoji for display in lists. */
+  emoji?: string;
+
   /**  */
   metadata?: MetaData;
 

@@ -40,7 +40,9 @@ const generatePermalink = async ({
     .join('/');
 };
 
-const getNormalizedPost = async (post: CollectionEntry<'post'>): Promise<Post> => {
+type ContentEntry = CollectionEntry<'blog'> | CollectionEntry<'today_i_learned'> | CollectionEntry<'ai_agent'>;
+
+const getNormalizedPost = async (post: ContentEntry): Promise<Post> => {
   const { id, slug: rawSlug = '', data } = post;
   const { Content, remarkPluginFrontmatter } = await post.render();
 
@@ -55,6 +57,7 @@ const getNormalizedPost = async (post: CollectionEntry<'post'>): Promise<Post> =
     author,
     draft = false,
     metadata = {},
+    emoji,
   } = data;
 
   const slug = cleanSlug(rawSlug); // cleanSlug(rawSlug.split('/').pop());
@@ -78,6 +81,7 @@ const getNormalizedPost = async (post: CollectionEntry<'post'>): Promise<Post> =
     category: category,
     tags: tags,
     author: author,
+    emoji: emoji,
 
     draft: draft,
 
@@ -105,7 +109,8 @@ const getRandomizedPosts = (array: Post[], num: number) => {
 const load = async function (): Promise<Array<Post>> {
   const posts = await getCollection('blog');
   const todayILearned = await getCollection('today_i_learned');
-  const blogs = posts.concat(todayILearned);
+  const aiAgent = await getCollection('ai_agent');
+  const blogs = posts.concat(todayILearned, aiAgent);
   const normalizedPosts = blogs.map(async (post) => await getNormalizedPost(post));
 
   const results = (await Promise.all(normalizedPosts))
@@ -204,7 +209,7 @@ export const getStaticPathsBlogCategory = async ({ paginate }: { paginate: Pagin
   const posts = await fetchPosts();
   const categories = new Set<string>();
   posts.map((post) => {
-    typeof post.category === 'string' && categories.add(post.category.toLowerCase());
+    if (typeof post.category === 'string') categories.add(post.category.toLowerCase());
   });
 
   return Array.from(categories).flatMap((category) =>
@@ -226,7 +231,7 @@ export const getStaticPathsBlogTag = async ({ paginate }: { paginate: PaginateFu
   const posts = await fetchPosts();
   const tags = new Set<string>();
   posts.map((post) => {
-    Array.isArray(post.tags) && post.tags.map((tag) => tags.add(tag.toLowerCase()));
+    if (Array.isArray(post.tags)) post.tags.map((tag) => tags.add(tag.toLowerCase()));
   });
 
   return Array.from(tags).flatMap((tag) =>

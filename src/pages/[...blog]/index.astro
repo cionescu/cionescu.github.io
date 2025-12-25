@@ -5,13 +5,13 @@ import merge from 'lodash.merge';
 import type { ImageMetadata } from 'astro';
 import Layout from '~/layouts/PageLayout.astro';
 import SinglePost from '~/components/blog/SinglePost.astro';
-import ToBlogLink from '~/components/blog/ToBlogLink.astro';
+import TableOfContents from '~/components/blog/TableOfContents.astro';
 
 import { getCanonical, getPermalink } from '~/utils/permalinks';
-import { getStaticPathsBlogPost, blogPostRobots } from '~/utils/blog';
+import { fetchPosts, getStaticPathsBlogPost, blogPostRobots } from '~/utils/blog';
 import { findImage } from '~/utils/images';
 import type { MetaData } from '~/types';
-import RelatedPosts from '~/components/blog/RelatedPosts.astro';
+import { getBlogPermalink } from '~/utils/permalinks';
 
 export const prerender = true;
 
@@ -25,6 +25,20 @@ const { post } = Astro.props as Props;
 
 const url = getCanonical(getPermalink(post.permalink, 'post'));
 const image = (await findImage(post.image)) as ImageMetadata | string | undefined;
+
+const fetchedPosts = await fetchPosts();
+const latestArticles = fetchedPosts
+  .filter((p) => p.slug !== post.slug)
+  .sort((a, b) => Number(new Date(b.publishDate)) - Number(new Date(a.publishDate)))
+  .slice(0, 3);
+
+const sectionConfig = post.permalink?.startsWith('today-i-learned')
+  ? { label: 'Today I Learned', href: '/today-i-learned' }
+  : post.permalink?.startsWith('ai-agent')
+    ? { label: 'Building AI Agents', href: '/ai-agent' }
+    : { label: 'Guides', href: getBlogPermalink() };
+const sectionLabel = sectionConfig.label;
+const sectionHref = sectionConfig.href;
 
 const metadata = merge(
   {
@@ -44,7 +58,41 @@ const metadata = merge(
 ---
 
 <Layout metadata={metadata}>
-  <SinglePost post={{ ...post, image: image }} url={url} />
-  <!-- <ToBlogLink /> -->
-  <RelatedPosts post={post} />
+  <div class="bg-vadim-bg min-h-screen">
+    <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+      <div class="flex items-center text-sm text-gray-500 mb-8">
+        <a href="/" class="hover:text-accent-orange">Home</a>
+        <span class="mx-2">/</span>
+        <a href={sectionHref} class="hover:text-accent-orange">{sectionLabel}</a>
+        <span class="mx-2">/</span>
+        <span class="text-gray-900">{post.title}</span>
+      </div>
+
+      <div class="grid grid-cols-1 lg:grid-cols-[1fr_300px] gap-12">
+        <article class="min-w-0">
+          <SinglePost post={{ ...post, image: image }} url={url} />
+        </article>
+
+        <aside class="hidden lg:block">
+          <div class="sticky top-24 space-y-12">
+            <TableOfContents />
+
+            <div>
+              <h4 class="font-bold text-gray-900 mb-4 text-sm uppercase tracking-wider">Latest articles</h4>
+              <div class="space-y-1">
+                {latestArticles.map((p) => (
+                  <a href={getPermalink(p.permalink, 'post')} class="flex items-start gap-3 group py-2">
+                    <span class="text-lg mt-0.5 flex-shrink-0">{p.emoji || '⭐'}</span>
+                    <span class="text-sm text-gray-600 font-medium group-hover:text-accent-orange group-hover:underline decoration-accent-orange/30 underline-offset-4 transition-all leading-snug">
+                      {p.title}
+                    </span>
+                  </a>
+                ))}
+              </div>
+            </div>
+          </div>
+        </aside>
+      </div>
+    </div>
+  </div>
 </Layout>

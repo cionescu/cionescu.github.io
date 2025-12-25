@@ -7,6 +7,7 @@ tags:
   - ruby-on-rails
   - capybara
 category: Today I Learned
+emoji: 🛠️
 ---
 
 ## Implicit Declaration of Function is Invalid in C99

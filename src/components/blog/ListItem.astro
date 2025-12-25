@@ -19,6 +19,11 @@ const { post } = Astro.props;
 const image = (await findImage(post.image)) as ImageMetadata | undefined;
 
 const link = APP_BLOG?.post?.isEnabled ? getPermalink(post.permalink, 'post') : '';
+const categoryLabels: Record<string, string> = {
+  'ai-agent': 'Building AI Agents',
+  'today-i-learned': 'Today I Learned',
+};
+const categoryLabel = post.category ? (categoryLabels[post.category] ?? post.category.replaceAll('-', ' ')) : undefined;
 ---
 
 <article class={`max-w-md mx-auto md:max-w-none grid gap-6 md:gap-8 ${image ? 'md:grid-cols-2' : ''}`}>
@@ -60,12 +65,12 @@ const link = APP_BLOG?.post?.isEnabled ? getPermalink(post.permalink, 'post') : 
             )
           }
           {
-            post.category && (
+            categoryLabel && (
               <>
                 {' '}
                 ·{' '}
                 <span class="capitalize hover:underline">
-                  {post.category.replaceAll('-', ' ')}
+                  {categoryLabel}
                 </span>
               </>
             )

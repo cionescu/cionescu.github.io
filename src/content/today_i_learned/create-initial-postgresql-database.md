@@ -5,6 +5,7 @@ excerpt: "You just installed PostgreSQL and attempt to run psql and get the foll
 tags:
   - postgresql
 category: Today I Learned
+emoji: 🐘
 ---
 
 ## How to Install PostgreSQL

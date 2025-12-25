@@ -45,43 +45,28 @@ const metadataDefinition = () =>
     })
     .optional();
 
-const blogCollection = defineCollection({
-  schema: z.object({
-    publishDate: z.date().optional(),
-    updateDate: z.date().optional(),
-    draft: z.boolean().optional(),
+const createPostCollection = () =>
+  defineCollection({
+    schema: z.object({
+      publishDate: z.date().optional(),
+      updateDate: z.date().optional(),
+      draft: z.boolean().optional(),
 
-    title: z.string(),
-    excerpt: z.string().optional(),
-    image: z.string().optional(),
+      title: z.string(),
+      excerpt: z.string().nullable().optional(),
+      image: z.string().nullable().optional(),
 
-    category: z.string().optional(),
-    tags: z.array(z.string()).optional(),
-    author: z.string().optional(),
+      category: z.string().optional(),
+      tags: z.array(z.string()).optional(),
+      author: z.string().optional(),
+      emoji: z.string().optional(),
 
-    metadata: metadataDefinition(),
-  }),
-});
-
-const todayILearnedCollection = defineCollection({
-  schema: z.object({
-    publishDate: z.date().optional(),
-    updateDate: z.date().optional(),
-    draft: z.boolean().optional(),
-
-    title: z.string(),
-    excerpt: z.string().optional(),
-    image: z.string().optional(),
-
-    category: z.string().optional(),
-    tags: z.array(z.string()).optional(),
-    author: z.string().optional(),
-
-    metadata: metadataDefinition(),
-  }),
-});
+      metadata: metadataDefinition(),
+    }),
+  });
 
 export const collections = {
-  post: blogCollection,
-  todayILearned: todayILearnedCollection,
+  blog: createPostCollection(),
+  today_i_learned: createPostCollection(),
+  ai_agent: createPostCollection(),
 };

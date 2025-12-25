@@ -32,7 +32,7 @@ import '@fontsource-variable/inter';
     --aw-color-text-heading: rgb(0 0 0); 
     --aw-color-text-default: rgb(16 16 16);
     --aw-color-text-muted: rgb(16 16 16 / 66%);
-    --aw-color-bg-page: rgb(255 255 255);
+    --aw-color-bg-page: #FAFAF9;
 
     --aw-color-bg-page-dark: rgb(3 6 32);
 
@@ -56,5 +56,28 @@ import '@fontsource-variable/inter';
 
     ::selection {background-color: black; color: snow}
 
+  }
+
+  body {
+    -webkit-font-smoothing: antialiased;
+  }
+
+  /* Custom scrollbar */
+  ::-webkit-scrollbar {
+    width: 8px;
+  }
+  ::-webkit-scrollbar-track {
+    background: transparent;
+  }
+  ::-webkit-scrollbar-thumb {
+    background: #d1d5db;
+    border-radius: 4px;
+  }
+  ::-webkit-scrollbar-thumb:hover {
+    background: #9ca3af;
+  }
+
+  html {
+    scroll-behavior: smooth;
   }
 </style>

@@ -13,7 +13,7 @@ import tasks from './src/utils/tasks';
 
 import { readingTimeRemarkPlugin, responsiveTablesRehypePlugin } from './src/utils/frontmatter.mjs';
 
-import { ANALYTICS, SITE } from './src/utils/config.ts';
+import { ANALYTICS, SITE, SITEMAP } from './src/utils/config.ts';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
@@ -32,7 +32,13 @@ export default defineConfig({
   output: 'static',
 
   integrations: [
-    sitemap(),
+    sitemap({
+      filter: (page) => {
+        const pathname = (page.pathname || '').replace(/\/$/, '');
+        const excluded = (SITEMAP?.exclude || []).map((item) => String(item || '').replace(/\/$/, ''));
+        return !excluded.includes(pathname);
+      },
+    }),
     mdx(),
     icon({
       include: {

@@ -68,6 +68,9 @@ export interface AnalyticsConfig {
     };
   };
 }
+export interface SitemapConfig {
+  exclude?: string[];
+}
 
 const config = yaml.load(fs.readFileSync('src/config.yaml', 'utf8')) as {
   site?: SiteConfig;
@@ -78,6 +81,7 @@ const config = yaml.load(fs.readFileSync('src/config.yaml', 'utf8')) as {
   };
   ui?: unknown;
   analytics?: unknown;
+  sitemap?: SitemapConfig;
 };
 
 const DEFAULT_SITE_NAME = 'Website';
@@ -200,9 +204,18 @@ const getAnalytics = () => {
   return merge({}, _default, config?.analytics ?? {}) as AnalyticsConfig;
 };
 
+const getSitemap = () => {
+  const _default = {
+    exclude: [],
+  };
+
+  return merge({}, _default, config?.sitemap ?? {}) as SitemapConfig;
+};
+
 export const SITE = getSite();
 export const I18N = getI18N();
 export const METADATA = getMetadata();
 export const APP_BLOG = getAppBlog();
 export const UI = getUI();
 export const ANALYTICS = getAnalytics();
+export const SITEMAP = getSitemap();
