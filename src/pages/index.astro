@@ -13,16 +13,13 @@ const metadata = {
 };
 
 const illustrations = {
-  rocket: `<svg viewBox="0 0 200 160" class="w-full h-40" fill="none" xmlns="http://www.w3.org/2000/svg">
-    <circle cx="100" cy="80" r="60" fill="#DBEAFE" fill-opacity="0.5" />
-    <path d="M100 30L120 70H80L100 30Z" fill="#F87171" />
-    <rect x="80" y="70" width="40" height="50" fill="#E5E7EB" />
-    <path d="M80 70L60 100H80V70Z" fill="#9CA3AF" />
-    <path d="M120 70L140 100H120V70Z" fill="#9CA3AF" />
-    <path d="M90 120L85 140L95 135L105 140L100 120" fill="#F59E0B" />
-    <circle cx="100" cy="90" r="10" fill="#60A5FA" />
-    <path d="M40 130C40 118.954 48.9543 110 60 110C64.0846 110 67.8488 111.225 71.0069 113.326C73.3221 105.454 80.5758 100 89 100C99.4934 100 108 108.507 108 119" stroke="#94A3B8" stroke-width="2" stroke-linecap="round" />
-    <path d="M160 130C160 118.954 151.046 110 140 110C135.915 110 132.151 111.225 128.993 113.326C126.678 105.454 119.424 100 111 100C100.507 100 92 108.507 92 119" stroke="#94A3B8" stroke-width="2" stroke-linecap="round" />
+  rocket: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 220" fill="none" role="img" aria-label="Abstract capsule with small spark">
+    <rect x="72" y="84" width="176" height="68" rx="34" fill="#EEF2FF"/>
+    <rect x="72" y="84" width="176" height="68" rx="34" stroke="#0F172A" stroke-opacity="0.18" stroke-width="4"/>
+    <circle cx="132" cy="118" r="6" fill="#0F172A" fill-opacity="0.35"/>
+    <circle cx="160" cy="118" r="6" fill="#0F172A" fill-opacity="0.35"/>
+    <circle cx="188" cy="118" r="6" fill="#0F172A" fill-opacity="0.35"/>
+    <path d="M245 56l6 12 12 6-12 6-6 12-6-12-12-6 12-6 6-12z" fill="#0F172A" fill-opacity="0.22"/>
   </svg>`,
   meeting: `<svg viewBox="0 0 200 160" class="w-full h-40" fill="none" xmlns="http://www.w3.org/2000/svg">
     <circle cx="100" cy="80" r="60" fill="#FEF3C7" fill-opacity="0.5" />
@@ -175,7 +172,7 @@ const latestIssues = posts
           >
             <div class="space-y-4">
               <div class="flex items-center justify-between">
-                <span class="text-2xl">🚀</span>
+                <span class="text-2xl">✨</span>
               </div>
               <div class="rounded-xl bg-white/60 p-4">
                 <div set:html={illustrations.rocket}></div>
@@ -194,7 +191,7 @@ const latestIssues = posts
           <div class="group relative rounded-2xl p-6 transition-all duration-300 hover:-translate-y-1 hover:shadow-card cursor-pointer border border-transparent hover:border-gray-100 bg-guide-yellow">
             <div class="space-y-4">
               <div class="flex items-center justify-between">
-                <span class="text-2xl">⚡</span>
+                <span class="text-2xl">💪🏻</span>
                 <span class="px-2 py-0.5 text-[10px] font-bold uppercase tracking-wider text-green-700 bg-green-100 rounded-full">Coming up</span>
               </div>
               <div class="rounded-xl bg-white/60 p-4">
@@ -212,7 +209,7 @@ const latestIssues = posts
           <div class="group relative rounded-2xl p-6 transition-all duration-300 hover:-translate-y-1 hover:shadow-card cursor-pointer border border-transparent hover:border-gray-100 bg-guide-peach">
             <div class="space-y-4">
               <div class="flex items-center justify-between">
-                <span class="text-2xl">🛡️</span>
+                <span class="text-2xl">💻</span>
                 <span class="px-2 py-0.5 text-[10px] font-bold uppercase tracking-wider text-green-700 bg-green-100 rounded-full">Coming up</span>
               </div>
               <div class="rounded-xl bg-white/60 p-4">
