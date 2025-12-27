@@ -50,49 +50,53 @@ const metadata = merge(
     },
     openGraph: {
       type: 'article',
-      ...(image ? { images: [{ url: image, width: (image as ImageMetadata)?.width, height: (image as ImageMetadata)?.height }] } : {}),
+      ...(image
+        ? { images: [{ url: image, width: (image as ImageMetadata)?.width, height: (image as ImageMetadata)?.height }] }
+        : {}),
     },
   },
   { ...(post?.metadata ? { ...post.metadata, canonical: post.metadata?.canonical || url } : {}) }
 ) as MetaData;
 ---
 
-<Layout metadata={metadata}>
-  <div class="bg-vadim-bg min-h-screen">
-    <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-      <div class="flex items-center text-sm text-gray-500 mb-8">
-        <a href="/" class="hover:text-accent-orange">Home</a>
-        <span class="mx-2">/</span>
-        <a href={sectionHref} class="hover:text-accent-orange">{sectionLabel}</a>
-        <span class="mx-2">/</span>
-        <span class="text-gray-900">{post.title}</span>
-      </div>
+  <Layout metadata={metadata}>
+    <div class="bg-vadim-bg min-h-screen">
+      <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+        <div class="flex items-center text-sm text-gray-500 mb-8">
+          <a href="/" class="hover:text-accent-orange">Home</a>
+          <span class="mx-2">/</span>
+          <a href={sectionHref} class="hover:text-accent-orange">{sectionLabel}</a>
+          <span class="mx-2">/</span>
+          <span class="text-gray-900">{post.title}</span>
+        </div>
 
-      <div class="grid grid-cols-1 lg:grid-cols-[1fr_300px] gap-12">
-        <article class="min-w-0">
-          <SinglePost post={{ ...post, image: image }} url={url} />
-        </article>
+        <div class="grid grid-cols-1 lg:grid-cols-[1fr_300px] gap-12">
+          <article class="min-w-0">
+            <SinglePost post={{ ...post, image: image }} url={url} />
+          </article>
 
-        <aside class="hidden lg:block">
-          <div class="sticky top-24 space-y-12">
-            <TableOfContents />
+          <aside class="hidden lg:block">
+            <div class="sticky top-24 space-y-12">
+              <TableOfContents />
 
-            <div>
-              <h4 class="font-bold text-gray-900 mb-4 text-sm uppercase tracking-wider">Latest articles</h4>
-              <div class="space-y-1">
-                {latestArticles.map((p) => (
-                  <a href={getPermalink(p.permalink, 'post')} class="flex items-start gap-3 group py-2">
-                    <span class="text-lg mt-0.5 flex-shrink-0">{p.emoji || '⭐'}</span>
-                    <span class="text-sm text-gray-600 font-medium group-hover:text-accent-orange group-hover:underline decoration-accent-orange/30 underline-offset-4 transition-all leading-snug">
-                      {p.title}
-                    </span>
-                  </a>
-                ))}
+              <div>
+                <h4 class="font-bold text-gray-900 mb-4 text-sm uppercase tracking-wider">Latest articles</h4>
+                <div class="space-y-1">
+                  {
+                    latestArticles.map((p) => (
+                      <a href={getPermalink(p.permalink, 'post')} class="flex items-start gap-3 group py-2">
+                        <span class="text-lg mt-0.5 flex-shrink-0">{p.emoji || '⭐'}</span>
+                        <span class="text-sm text-gray-600 font-medium group-hover:text-accent-orange group-hover:underline decoration-accent-orange/30 underline-offset-4 transition-all leading-snug">
+                          {p.title}
+                        </span>
+                      </a>
+                    ))
+                  }
+                </div>
               </div>
             </div>
-          </div>
-        </aside>
+          </aside>
+        </div>
       </div>
     </div>
-  </div>
-</Layout>
+  </Layout>
