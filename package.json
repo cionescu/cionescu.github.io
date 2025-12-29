@@ -30,7 +30,7 @@
     "@astrojs/mdx": "4.3.13",
     "@astrojs/partytown": "2.1.4",
     "@iconify-json/flat-color-icons": "^1.2.3",
-    "@iconify-json/tabler": "^1.2.23",
+    "@iconify-json/tabler": "^1.2.25",
     "@tailwindcss/typography": "0.5.19",
     "@tailwindcss/vite": "4.1.18",
     "@types/lodash.merge": "^4.6.9",
